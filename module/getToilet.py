@@ -1,6 +1,4 @@
-import asyncio
 from aiohttp import web
-from utils import *
 
 def getN(geo) -> list:
     w, j = geohash.decode(geo)

@@ -1,4 +1,3 @@
-import asyncio
 from aiohttp import web
 
 async def signin(request):

@@ -1,16 +1,10 @@
-import aiohttp
 import asyncpg
-import asyncio
 import base64
-import aiohttp_session
 from cryptography import fernet
 from aiohttp import web
-from aiohttp_session import setup, get_session
 from aiohttp_session.cookie_storage import EncryptedCookieStorage
 from utils import *
 import os.path as path
-import time
-import geohash
 from .login import signup, signin
 from .getToilet import getToilet
 from .sample import *

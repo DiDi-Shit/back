@@ -1,5 +1,4 @@
 import yaml
-import os
 from math import radians, cos, sin, asin, sqrt
 
 
