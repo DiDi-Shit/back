@@ -2,6 +2,7 @@ import asyncpg
 import base64
 from cryptography import fernet
 from aiohttp import web
+from aiohttp_session import setup
 from aiohttp_session.cookie_storage import EncryptedCookieStorage
 from utils import *
 import os.path as path
