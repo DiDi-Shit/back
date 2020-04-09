@@ -31,3 +31,12 @@ async def getToilet(request):
     except asyncpg.exceptions.UniqueViolationError:
         return web.Response(text="Already exist")
     return web.json_response(data=res)
+
+async def acquireToilet(app,sql,args):
+    pool=app['pool']
+    try:
+        async with pool.acquire() as conn:
+            values = await conn.fetch(sql,args)
+            return values
+    except asyncpg.exceptions.UniqueViolationError:
+        return web.Response(text="Some Bug here")
