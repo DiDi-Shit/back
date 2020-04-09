@@ -25,6 +25,7 @@ async def initapp(config):
         database=dbconfig["database"],
         password=dbconfig["password"],
     )
+    
     app.router.add_get("/", hello)
     app.router.add_post("/login", signin)
     app.router.add_post("/signup", signup)
