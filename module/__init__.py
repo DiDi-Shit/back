@@ -8,6 +8,7 @@ from utils import *
 import os.path as path
 from .login import signup, signin
 from .getToilet import getToilet
+from .addToilet import addToilet
 from .sample import *
 
 
@@ -25,9 +26,11 @@ async def initapp(config):
         database=dbconfig["database"],
         password=dbconfig["password"],
     )
-    
+
     app.router.add_get("/", hello)
     app.router.add_post("/login", signin)
     app.router.add_post("/signup", signup)
     app.router.add_post("/getToilet", getToilet)
+    app.router.add_post("/addToilet", addToilet)
+
     return app

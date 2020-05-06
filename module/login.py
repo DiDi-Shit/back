@@ -1,4 +1,5 @@
 from aiohttp import web
+import asyncpg
 
 
 async def signin(request):
@@ -27,4 +28,3 @@ async def signup(request):
     except asyncpg.exceptions.UniqueViolationError:
         return web.Response(text="Already exist")
     return web.Response(text="Insert Ok. User Created.")
-
