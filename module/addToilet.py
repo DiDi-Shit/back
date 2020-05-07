@@ -11,9 +11,12 @@ async def addToilet(request):
         w = float(data["w"])
         j = float(data["j"])
     except:
-        data = request.query
-        w = float(data["w"])
-        j = float(data["j"])
+        try:
+            data = request.query
+            w = float(data["w"])
+            j = float(data["j"])
+        except:
+            web.Response(text="Wrong format")
     geo = geohash.encode(w, j)
     try:
         async with pool.acquire() as conn:
