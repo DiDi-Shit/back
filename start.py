@@ -8,4 +8,4 @@ if __name__ == "__main__":
     app = loop.run_until_complete(
         module.initapp(path.join(path.dirname(__file__), "config.yml"))
     )
-    web.run_app(app, port=6800)
+    web.run_app(app, port=9080)
