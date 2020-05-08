@@ -1,21 +1,68 @@
-import asyncio
+pip install aiohttp
+import aiohttp
 import asyncpg
-import json 
+import asyncio
+import base64
+import aiohttp_session
+from cryptography import fernet
 from aiohttp import web
+from aiohttp_session import setup, get_session
+from aiohttp_session.cookie_storage import EncryptedCookieStorage
+import time
+import requests
 
-async def Create_Order(user,wcid,remark):#创建订单时还未付款
-     conn = await asyncpg.connect(user='hxx', password='zxcZXC123', database='Didishit')
-     await pool.execute('''insert into deliverrecord (id,tid,statement) VALUES ($1,$2,$3,$4)''',user,wcid,remark)
-     await conn.close()
-async def Delete_Order(user,wcid):#删除相关订单
-     conn = await asyncpg.connect(user='hxx', password='zxcZXC123', database='Didishit')
-       await pool.execute('''delete from  deliverrecord where user=id and wcid=tid''')
-     await conn.close()
-async def Update_Order(user,wcid,remark):#修改订单的备注信息
-     conn = await asyncpg.connect(user='hxx', password='zxcZXC123', database='Didishit')
-     await pool.execute("update deliverrecord set statement=remark where user=id and wcid=tid'",remark)
-     await conn.close()
-async def Query_Order(user,wcid):#查询相关订单
-     conn = await asyncpg.connect(user='hxx', password='zxcZXC123', database='Didishit')
-     res=await conn.fetch('select * from deliverrecord where user=id and wcid=tid',id,tid)
-     await conn.close()
+async def Create_Order(request):
+    pool = request.app["pool"]
+    data = await request.post()
+    try:
+        async with pool.acquire() as conn:
+            await conn.execute(
+                 "insert into deliverrecord values ({},{},'{}');".format(data["id"], data["tid"],data["statement"])
+            )
+    except asyncpg.exceptions.UniqueViolationError:
+        return web.Response(text="Already exist")
+    return web.Response(text="create order.")
+
+async def Query_Order(request):
+    pool = request.app["pool"]
+    data = await request.post()
+    try:
+        async with pool.acquire() as conn:
+            values = await conn.fetch(
+                "select * from deliverrecord where app = ({},{});".format(data["id"],data["tid"])
+            )
+    except:
+        return web.Response(text="no.") 
+    return web.Response(text="yes.") 
+ 
+ async def Delete_Order(request):
+    pool = request.app["pool"]
+    data = await request.post()
+    try:
+        async with pool.acquire() as conn:
+            await conn.execute(
+                 "delete from deliverrecord where app=({},{});".format(data["id"],data["tid"])
+            )
+    except:
+        return web.Response(text="delete failed")
+    return web.Response(text="delete order.")  
+   
+ async def Update_Order(request):
+    pool = request.app["pool"]
+    data = await request.post()
+     try:
+        async with pool.acquire() as conn:
+            await conn.execute(
+                "update deliverrecord set values ('{}')where app=({},{});".format(data["statement"],data["id"],data["tid"])
+            )
+    except:
+       return web.Response(text="update failed.") 
+    return web.Response(text="update order.")
+
+
+
+
+
+  
+ 
+
